@@ -1,0 +1,27 @@
+import { cn } from '#/lib/utils'
+
+export function ClientCell({
+  initials,
+  tone,
+  name,
+}: {
+  initials: string
+  tone: string
+  name: string
+}) {
+  return (
+    <span className="flex items-center gap-2">
+      <span
+        className={cn(
+          'grid size-6 shrink-0 place-items-center rounded-md text-[11px] font-bold',
+          tone,
+        )}
+      >
+        {initials}
+      </span>
+      <span className="max-w-[150px] truncate font-normal text-neutral-800">
+        {name}
+      </span>
+    </span>
+  )
+}

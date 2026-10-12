@@ -14,6 +14,12 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as DesignSystemRouteImport } from './routes/design-system'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedAiAssistenIndexRouteImport } from './routes/_authenticated/ai-assisten/index'
+import { Route as AuthenticatedClientsIndexRouteImport } from './routes/_authenticated/clients/index'
+import { Route as AuthenticatedInvoicesIndexRouteImport } from './routes/_authenticated/invoices/index'
+import { Route as AuthenticatedProposalsIndexRouteImport } from './routes/_authenticated/proposals/index'
+import { Route as AuthenticatedTemplatesIndexRouteImport } from './routes/_authenticated/templates/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -40,6 +46,41 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAiAssistenIndexRoute =
+  AuthenticatedAiAssistenIndexRouteImport.update({
+    id: '/ai-assisten/',
+    path: '/ai-assisten/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedClientsIndexRoute =
+  AuthenticatedClientsIndexRouteImport.update({
+    id: '/clients/',
+    path: '/clients/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedInvoicesIndexRoute =
+  AuthenticatedInvoicesIndexRouteImport.update({
+    id: '/invoices/',
+    path: '/invoices/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedProposalsIndexRoute =
+  AuthenticatedProposalsIndexRouteImport.update({
+    id: '/proposals/',
+    path: '/proposals/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTemplatesIndexRoute =
+  AuthenticatedTemplatesIndexRouteImport.update({
+    id: '/templates/',
+    path: '/templates/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -51,14 +92,26 @@ export interface FileRoutesByFullPath {
   '/design-system': typeof DesignSystemRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/ai-assisten/': typeof AuthenticatedAiAssistenIndexRoute
+  '/clients/': typeof AuthenticatedClientsIndexRoute
+  '/invoices/': typeof AuthenticatedInvoicesIndexRoute
+  '/proposals/': typeof AuthenticatedProposalsIndexRoute
+  '/templates/': typeof AuthenticatedTemplatesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/design-system': typeof DesignSystemRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/ai-assisten': typeof AuthenticatedAiAssistenIndexRoute
+  '/clients': typeof AuthenticatedClientsIndexRoute
+  '/invoices': typeof AuthenticatedInvoicesIndexRoute
+  '/proposals': typeof AuthenticatedProposalsIndexRoute
+  '/templates': typeof AuthenticatedTemplatesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -67,13 +120,41 @@ export interface FileRoutesById {
   '/design-system': typeof DesignSystemRoute
   '/login': typeof LoginRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/_authenticated/ai-assisten/': typeof AuthenticatedAiAssistenIndexRoute
+  '/_authenticated/clients/': typeof AuthenticatedClientsIndexRoute
+  '/_authenticated/invoices/': typeof AuthenticatedInvoicesIndexRoute
+  '/_authenticated/proposals/': typeof AuthenticatedProposalsIndexRoute
+  '/_authenticated/templates/': typeof AuthenticatedTemplatesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/design-system' | '/login' | '/dashboard' | '/api/auth/$'
+  fullPaths:
+    | '/'
+    | '/design-system'
+    | '/login'
+    | '/dashboard'
+    | '/settings'
+    | '/api/auth/$'
+    | '/ai-assisten/'
+    | '/clients/'
+    | '/invoices/'
+    | '/proposals/'
+    | '/templates/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/design-system' | '/login' | '/dashboard' | '/api/auth/$'
+  to:
+    | '/'
+    | '/design-system'
+    | '/login'
+    | '/dashboard'
+    | '/settings'
+    | '/api/auth/$'
+    | '/ai-assisten'
+    | '/clients'
+    | '/invoices'
+    | '/proposals'
+    | '/templates'
   id:
     | '__root__'
     | '/'
@@ -81,7 +162,13 @@ export interface FileRouteTypes {
     | '/design-system'
     | '/login'
     | '/_authenticated/dashboard'
+    | '/_authenticated/settings'
     | '/api/auth/$'
+    | '/_authenticated/ai-assisten/'
+    | '/_authenticated/clients/'
+    | '/_authenticated/invoices/'
+    | '/_authenticated/proposals/'
+    | '/_authenticated/templates/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -129,6 +216,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/ai-assisten/': {
+      id: '/_authenticated/ai-assisten/'
+      path: '/ai-assisten'
+      fullPath: '/ai-assisten/'
+      preLoaderRoute: typeof AuthenticatedAiAssistenIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/clients/': {
+      id: '/_authenticated/clients/'
+      path: '/clients'
+      fullPath: '/clients/'
+      preLoaderRoute: typeof AuthenticatedClientsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/invoices/': {
+      id: '/_authenticated/invoices/'
+      path: '/invoices'
+      fullPath: '/invoices/'
+      preLoaderRoute: typeof AuthenticatedInvoicesIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/proposals/': {
+      id: '/_authenticated/proposals/'
+      path: '/proposals'
+      fullPath: '/proposals/'
+      preLoaderRoute: typeof AuthenticatedProposalsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/templates/': {
+      id: '/_authenticated/templates/'
+      path: '/templates'
+      fullPath: '/templates/'
+      preLoaderRoute: typeof AuthenticatedTemplatesIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -141,10 +270,22 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedAiAssistenIndexRoute: typeof AuthenticatedAiAssistenIndexRoute
+  AuthenticatedClientsIndexRoute: typeof AuthenticatedClientsIndexRoute
+  AuthenticatedInvoicesIndexRoute: typeof AuthenticatedInvoicesIndexRoute
+  AuthenticatedProposalsIndexRoute: typeof AuthenticatedProposalsIndexRoute
+  AuthenticatedTemplatesIndexRoute: typeof AuthenticatedTemplatesIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedAiAssistenIndexRoute: AuthenticatedAiAssistenIndexRoute,
+  AuthenticatedClientsIndexRoute: AuthenticatedClientsIndexRoute,
+  AuthenticatedInvoicesIndexRoute: AuthenticatedInvoicesIndexRoute,
+  AuthenticatedProposalsIndexRoute: AuthenticatedProposalsIndexRoute,
+  AuthenticatedTemplatesIndexRoute: AuthenticatedTemplatesIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
