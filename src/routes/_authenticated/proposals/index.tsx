@@ -6,8 +6,9 @@ export const Route = createFileRoute('/_authenticated/proposals/')({
 
 function RouteComponent() {
   return (
-    <div>
+    <div className="flex">
       <h1>Halaman Proposals</h1>
+      <p>coba coderabbit</p>
     </div>
   )
 }
