@@ -5,13 +5,12 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
-
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
-
 import appCss from '../styles.css?url'
-
 import type { QueryClient } from '@tanstack/react-query'
 import { ThemeProvider } from '#/providers/theme-provider'
+import { ToastProvider } from '#/providers/toast-provider'
+import { NotFoundGlitch } from '#/components/motion/not-found/glitch'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -30,7 +29,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'Quevic - Ai Invoice & Proposal',
       },
     ],
     links: [
@@ -40,6 +39,17 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
     ],
   }),
+  notFoundComponent: () => (
+    <NotFoundGlitch
+      homeHref="/"
+      browseLabel="Kembali Kehalaman"
+      homeLabel="Halaman home"
+      description="Halaman yang Anda cari telah pindah, hilang, atau tidak pernah ada."
+      browseHref="/dashboard"
+      className="min-h-screen"
+      title="Halaman Tidak Tersedia"
+    />
+  ),
   shellComponent: RootDocument,
 })
 
@@ -52,7 +62,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="font-sans antialiased wrap-anywhere bg-background">
         <ThemeProvider defaultTheme="system" storageKey="theme">
-          {children}
+          <ToastProvider>{children}</ToastProvider>
         </ThemeProvider>
         <TanStackDevtools
           config={{

@@ -1,6 +1,7 @@
+
 generator client {
   provider = "prisma-client"
-  output   = "../src/integrations/generated/prisma"
+  output   = "../src/db/generated/prisma"
 }
 
 datasource db {
@@ -35,6 +36,7 @@ model Session {
 
   @@unique([token])
   @@map("session")
+  @@index([userId])
 }
 
 model Account {
@@ -54,6 +56,7 @@ model Account {
   updatedAt             DateTime
 
   @@map("account")
+  @@index([userId])
 }
 
 model Verification {
@@ -65,4 +68,15 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
+  @@index([identifier])
+}
+
+model RateLimit {
+  id          String @id
+  key         String
+  count       Int
+  lastRequest BigInt
+
+  @@unique([key])
+  @@map("rateLimit")
 }
