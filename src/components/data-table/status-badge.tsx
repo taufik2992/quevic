@@ -2,13 +2,7 @@ import { cn } from '#/lib/utils'
 import { Badge } from '#/components/ui/badge'
 
 type DocStatus =
-  | 'Paid'
-  | 'Sent'
-  | 'Overdue'
-  | 'Draft'
-  | 'Accepted'
-  | 'Viewed'
-  | 'Expired'
+  'Paid' | 'Sent' | 'Overdue' | 'Draft' | 'Accepted' | 'Viewed' | 'Expired'
 
 const STATUS_CLASS: Record<DocStatus, string> = {
   Paid: 'bg-success/15 text-success',
@@ -25,7 +19,7 @@ export function StatusBadge({ status }: { status: DocStatus }) {
     <Badge
       variant="secondary"
       className={cn(
-        'h-[22px] rounded-md border-0 px-2 text-[12px] font-medium',
+        'h-5.5 rounded-md border-0 px-2 text-[12px] font-medium',
         STATUS_CLASS[status],
       )}
     >

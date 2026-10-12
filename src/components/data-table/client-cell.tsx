@@ -19,7 +19,7 @@ export function ClientCell({
       >
         {initials}
       </span>
-      <span className="max-w-[150px] truncate font-normal text-neutral-800">
+      <span className="max-w-37.5 truncate font-normal text-neutral-800">
         {name}
       </span>
     </span>
