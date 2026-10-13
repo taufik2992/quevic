@@ -1,10 +1,7 @@
 import { useState } from 'react'
 import { useTable } from '@tanstack/react-table'
-import type {
-  ColumnDef,
-  RowData,
-  SortingState,
-} from '@tanstack/react-table'
+import type { ColumnDef, RowData, SortingState } from '@tanstack/react-table'
+import { cn } from '#/lib/utils'
 import {
   Table,
   TableBody,
@@ -20,12 +17,16 @@ interface DataTableProps<TData extends RowData> {
   columns: ColumnDef<DataTableFeatures, TData>[]
   data: TData[]
   emptyMessage?: string
+  onRowClick?: (row: TData) => void
+  isRowSelected?: (row: TData) => boolean
 }
 
 export function DataTable<TData extends RowData>({
   columns,
   data,
   emptyMessage = 'No results.',
+  onRowClick,
+  isRowSelected,
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([])
 
@@ -63,7 +64,15 @@ export function DataTable<TData extends RowData>({
       <TableBody>
         {rows.length ? (
           rows.map((row) => (
-            <TableRow key={row.id} className="border-border">
+            <TableRow
+              key={row.id}
+              onClick={onRowClick ? () => onRowClick(row.original) : undefined}
+              className={cn(
+                onRowClick && 'cursor-pointer',
+                isRowSelected?.(row.original) &&
+                  'bg-primary/6 hover:bg-primary/9',
+              )}
+            >
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id} className="first:pl-3">
                   <table.FlexRender cell={cell} />

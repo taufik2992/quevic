@@ -17,10 +17,12 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedAiAssistenIndexRouteImport } from './routes/_authenticated/ai-assisten/index'
 import { Route as AuthenticatedClientsIndexRouteImport } from './routes/_authenticated/clients/index'
+import { Route as AuthenticatedClientsNewRouteImport } from './routes/_authenticated/clients/new'
 import { Route as AuthenticatedInvoicesIndexRouteImport } from './routes/_authenticated/invoices/index'
 import { Route as AuthenticatedProposalsIndexRouteImport } from './routes/_authenticated/proposals/index'
 import { Route as AuthenticatedTemplatesIndexRouteImport } from './routes/_authenticated/templates/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as AuthenticatedClientsClientIdEditRouteImport } from './routes/_authenticated/clients/$clientId.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -63,6 +65,11 @@ const AuthenticatedClientsIndexRoute =
     path: '/clients/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedClientsNewRoute = AuthenticatedClientsNewRouteImport.update({
+  id: '/clients/new',
+  path: '/clients/new',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedInvoicesIndexRoute =
   AuthenticatedInvoicesIndexRouteImport.update({
     id: '/invoices/',
@@ -86,6 +93,12 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedClientsClientIdEditRoute =
+  AuthenticatedClientsClientIdEditRouteImport.update({
+    id: '/clients/$clientId/edit',
+    path: '/clients/$clientId/edit',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -93,12 +106,14 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/clients/new': typeof AuthenticatedClientsNewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/ai-assisten/': typeof AuthenticatedAiAssistenIndexRoute
   '/clients/': typeof AuthenticatedClientsIndexRoute
   '/invoices/': typeof AuthenticatedInvoicesIndexRoute
   '/proposals/': typeof AuthenticatedProposalsIndexRoute
   '/templates/': typeof AuthenticatedTemplatesIndexRoute
+  '/clients/$clientId/edit': typeof AuthenticatedClientsClientIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -106,12 +121,14 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/clients/new': typeof AuthenticatedClientsNewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/ai-assisten': typeof AuthenticatedAiAssistenIndexRoute
   '/clients': typeof AuthenticatedClientsIndexRoute
   '/invoices': typeof AuthenticatedInvoicesIndexRoute
   '/proposals': typeof AuthenticatedProposalsIndexRoute
   '/templates': typeof AuthenticatedTemplatesIndexRoute
+  '/clients/$clientId/edit': typeof AuthenticatedClientsClientIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -121,12 +138,14 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/clients/new': typeof AuthenticatedClientsNewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_authenticated/ai-assisten/': typeof AuthenticatedAiAssistenIndexRoute
   '/_authenticated/clients/': typeof AuthenticatedClientsIndexRoute
   '/_authenticated/invoices/': typeof AuthenticatedInvoicesIndexRoute
   '/_authenticated/proposals/': typeof AuthenticatedProposalsIndexRoute
   '/_authenticated/templates/': typeof AuthenticatedTemplatesIndexRoute
+  '/_authenticated/clients/$clientId/edit': typeof AuthenticatedClientsClientIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -136,12 +155,14 @@ export interface FileRouteTypes {
     | '/login'
     | '/dashboard'
     | '/settings'
+    | '/clients/new'
     | '/api/auth/$'
     | '/ai-assisten/'
     | '/clients/'
     | '/invoices/'
     | '/proposals/'
     | '/templates/'
+    | '/clients/$clientId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -149,12 +170,14 @@ export interface FileRouteTypes {
     | '/login'
     | '/dashboard'
     | '/settings'
+    | '/clients/new'
     | '/api/auth/$'
     | '/ai-assisten'
     | '/clients'
     | '/invoices'
     | '/proposals'
     | '/templates'
+    | '/clients/$clientId/edit'
   id:
     | '__root__'
     | '/'
@@ -163,12 +186,14 @@ export interface FileRouteTypes {
     | '/login'
     | '/_authenticated/dashboard'
     | '/_authenticated/settings'
+    | '/_authenticated/clients/new'
     | '/api/auth/$'
     | '/_authenticated/ai-assisten/'
     | '/_authenticated/clients/'
     | '/_authenticated/invoices/'
     | '/_authenticated/proposals/'
     | '/_authenticated/templates/'
+    | '/_authenticated/clients/$clientId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -237,6 +262,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedClientsIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/clients/new': {
+      id: '/_authenticated/clients/new'
+      path: '/clients/new'
+      fullPath: '/clients/new'
+      preLoaderRoute: typeof AuthenticatedClientsNewRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/invoices/': {
       id: '/_authenticated/invoices/'
       path: '/invoices'
@@ -265,27 +297,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/clients/$clientId/edit': {
+      id: '/_authenticated/clients/$clientId/edit'
+      path: '/clients/$clientId/edit'
+      fullPath: '/clients/$clientId/edit'
+      preLoaderRoute: typeof AuthenticatedClientsClientIdEditRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedClientsNewRoute: typeof AuthenticatedClientsNewRoute
   AuthenticatedAiAssistenIndexRoute: typeof AuthenticatedAiAssistenIndexRoute
   AuthenticatedClientsIndexRoute: typeof AuthenticatedClientsIndexRoute
   AuthenticatedInvoicesIndexRoute: typeof AuthenticatedInvoicesIndexRoute
   AuthenticatedProposalsIndexRoute: typeof AuthenticatedProposalsIndexRoute
   AuthenticatedTemplatesIndexRoute: typeof AuthenticatedTemplatesIndexRoute
+  AuthenticatedClientsClientIdEditRoute: typeof AuthenticatedClientsClientIdEditRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedClientsNewRoute: AuthenticatedClientsNewRoute,
   AuthenticatedAiAssistenIndexRoute: AuthenticatedAiAssistenIndexRoute,
   AuthenticatedClientsIndexRoute: AuthenticatedClientsIndexRoute,
   AuthenticatedInvoicesIndexRoute: AuthenticatedInvoicesIndexRoute,
   AuthenticatedProposalsIndexRoute: AuthenticatedProposalsIndexRoute,
   AuthenticatedTemplatesIndexRoute: AuthenticatedTemplatesIndexRoute,
+  AuthenticatedClientsClientIdEditRoute: AuthenticatedClientsClientIdEditRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

@@ -18,6 +18,7 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+  clients       Client[]
 
   @@unique([email])
   @@map("user")
@@ -79,4 +80,57 @@ model RateLimit {
 
   @@unique([key])
   @@map("rateLimit")
+}
+
+enum ClientType {
+  Company
+  Individual
+}
+
+enum ClientStatus {
+  Active
+  Lead
+  Inactive
+}
+
+model Client {
+  id             String       @id @default(cuid())
+  ownerId        String
+  owner          User         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  companyName    String
+  clientType     ClientType   @default(Company)
+  email          String
+  phone          String?
+  website        String?
+  description    String?      @db.Text
+
+  logoKey        String?
+  logoMime       String?
+  logoSize       Int?
+
+  billingAddress String       @db.Text
+  country        String       @default("Indonesia")
+  province       String?
+  city           String?
+  postalCode     String?
+
+  contactName     String?
+  contactPosition String?
+  contactEmail    String?
+  contactPhone    String?
+
+  status ClientStatus @default(Active)
+
+  invoiceCount  Int @default(0)
+  proposalCount Int @default(0)
+  totalSpent    Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([ownerId, email])
+  @@index([ownerId])
+  @@index([ownerId, status])
+  @@map("client")
 }
