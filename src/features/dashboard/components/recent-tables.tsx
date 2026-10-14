@@ -4,7 +4,10 @@ import { Button } from '#/components/ui/button'
 import { DataTable } from '#/components/data-table/data-table'
 import { invoiceColumns } from '#/features/invoices/invoice-columns'
 import { proposalColumns } from '#/features/proposals/proposal-columns'
-import type { RecentInvoice, RecentProposal } from '#/data/dashboard.types'
+import type {
+  RecentInvoice,
+  RecentProposal,
+} from '#/features/dashboard/data/dashboard.types'
 
 function RecentCard({
   title,

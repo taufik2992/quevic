@@ -1,6 +1,5 @@
 import { useDeferredValue, useEffect, useRef, useState } from 'react'
-import { PAGE_SIZES } from './documents'
-import type { PageKind } from './documents'
+import { PAGE_SIZES, type PageKind } from '../data/documents'
 
 // Generic preview for any HTML template string (client, invoice, proposal).
 // The iframe renders at the template's real pixel width and is scaled down

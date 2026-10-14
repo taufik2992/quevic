@@ -1,5 +1,5 @@
 import { Card, CardContent } from '#/components/ui/card'
-import { buildClientPreviewModel } from '#/features/clients/templates/templateDummy'
+import { buildClientPreviewModel } from '#/features/templates/data/templateDummy'
 import type { ClientFormApi } from '#/features/clients/components/ClientForm'
 import { ClientPreviewCard } from './ClientPreviewCard'
 

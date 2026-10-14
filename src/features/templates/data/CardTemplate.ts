@@ -10,13 +10,13 @@
 import type {
   ClientPreviewModel,
   PreviewContactKind,
-} from '#/features/clients/templates/templateDummy'
+} from '#/features/templates/data/templateDummy'
 import {
   escapeHtml,
   safeImageSrc,
   safeUrl,
-} from '#/features/clients/templates/documents'
-import type { PageKind } from '#/features/clients/templates/documents'
+} from '#/features/templates/data/documents'
+import type { PageKind } from '#/features/templates/data/documents'
 
 export interface ClientTemplateOptions {
   /** 'type' = client type pill (form pages), 'status' = status pill (detail panel). */
@@ -157,15 +157,15 @@ const CSS = `
     font-size: 12px; font-weight: 600; white-space: nowrap;
     padding: 4px 10px; border-radius: 999px;
   }
-  .qx-subtype { margin: 6px 0 0; font-size: 13px; color: var(--qx-muted); }
+  .qx-subtype { margin: 6px 0 0; font-size: 16px; font-weight: 500; color: var(--qx-muted); }
 
-  .qx-desc { margin: 10px 0 0; font-size: 14px; line-height: 1.7; color: var(--qx-muted); overflow-wrap: anywhere; }
+  .qx-desc { margin: 10px 0 0; font-size: 14px; font-weight: 400; line-height: 1.7; color: var(--qx-muted); overflow-wrap: anywhere; }
   .qx-divider { border: 0; border-top: 1px solid var(--qx-faint); margin: 20px 0; }
 
   .qx-rows { margin: 0; }
   .qx-row {
     display: flex; align-items: center; gap: 12px;
-    padding: 6px 0; font-size: 14px; line-height: 1.55;
+    padding: 6px 0; font-size: 14px; line-height: 1.55;  font-weight: 600;
     color: var(--qx-body); overflow-wrap: anywhere;
   }
   .qx-ic {
@@ -188,7 +188,7 @@ const CSS = `
     border: 1px solid #e9eef5;
     border-radius: 14px;
     padding: 14px 16px;
-    font-size: 13.5px; line-height: 1.6;
+    font-size: 13.5px; line-height: 1.6;  font-weight: 600;
     color: var(--qx-body); overflow-wrap: anywhere;
   }
   .qx-foot .qx-ic { background: #fff; border: 1px solid var(--qx-line); }

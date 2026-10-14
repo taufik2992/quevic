@@ -7,7 +7,7 @@ import {
 } from 'lucide-react'
 import { cn } from '#/lib/utils'
 import { Card, CardContent } from '#/components/ui/card'
-import type { DashboardStat } from '#/data/dashboard.types'
+import type { DashboardStat } from '#/features/dashboard/data/dashboard.types'
 
 const TONE = {
   green: 'bg-success/10 text-success',

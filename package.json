@@ -61,6 +61,7 @@
     "prisma": "^7.10.0",
     "radix-ui": "^1.7.0",
     "react": "^19.2.0",
+    "react-country-state-city": "^1.1.13",
     "react-dom": "^19.2.0",
     "recharts": "^3.8.0",
     "streamdown": "^2.3.0",

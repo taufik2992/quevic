@@ -1,5 +1,5 @@
 import { queryOptions } from '@tanstack/react-query'
-import { dashboardDummy } from '#/data/dashboard.dummy'
+import { dashboardDummy } from '#/features/dashboard/data/dashboard.dummy'
 
 export const dashboardKeys = {
   all: ['dashboard'] as const,

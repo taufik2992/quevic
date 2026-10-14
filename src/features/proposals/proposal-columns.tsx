@@ -1,6 +1,6 @@
 import { createColumnHelper } from '@tanstack/react-table'
 import { formatIDR } from '#/lib/format'
-import type { RecentProposal } from '#/data/dashboard.types'
+import type { RecentProposal } from '#/features/dashboard/data/dashboard.types'
 import { ClientCell } from '#/components/data-table/client-cell'
 import { RowActionsCell } from '#/components/data-table/row-actions-cell'
 import { SortableHeader } from '#/components/data-table/sortable-header'
@@ -30,9 +30,7 @@ export const proposalColumns = columnHelper.columns([
     ),
   }),
   columnHelper.accessor('amount', {
-    header: ({ column }) => (
-      <SortableHeader column={column} label="Amount" />
-    ),
+    header: ({ column }) => <SortableHeader column={column} label="Amount" />,
     cell: ({ row }) => (
       <span className="text-[12.5px] text-neutral-800">
         {formatIDR(row.original.amount)}
@@ -54,8 +52,6 @@ export const proposalColumns = columnHelper.columns([
   columnHelper.display({
     id: 'actions',
     header: '',
-    cell: ({ row }) => (
-      <RowActionsCell id={row.original.id} label="Proposal" />
-    ),
+    cell: ({ row }) => <RowActionsCell id={row.original.id} label="Proposal" />,
   }),
 ])

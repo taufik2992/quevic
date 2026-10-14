@@ -2,7 +2,6 @@ import {
   DeleteObjectCommand,
   GetObjectCommand,
   PutObjectCommand,
-  S3Client,
 } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import {
@@ -10,6 +9,7 @@ import {
   MAX_LOGO_SIZE,
 } from '#/features/clients/client.constants'
 import type { AllowedLogoMime } from '#/features/clients/client.constants'
+import { getS3Client, getStorageConfig } from '#/integrations/s3/storage'
 
 export {
   isAllowedLogoMime,
@@ -21,53 +21,6 @@ export type { AllowedLogoMime } from '#/features/clients/client.constants'
 // It reads secret bucket credentials from process.env.
 if (typeof window !== 'undefined') {
   throw new Error('clients/storage must only be used on the server')
-}
-
-interface StorageConfig {
-  endpoint: string
-  bucket: string
-  accessKeyId: string
-  secretAccessKey: string
-  region: string
-}
-
-export function getStorageConfig(): StorageConfig {
-  const endpoint = process.env.S3_ENDPOINT
-  const bucket = process.env.S3_BUCKET
-  const accessKeyId = process.env.S3_ACCESS_KEY_ID
-  const secretAccessKey = process.env.S3_SECRET_ACCESS_KEY
-
-  if (!endpoint || !bucket || !accessKeyId || !secretAccessKey) {
-    throw new Error(
-      'Client logo storage is not configured. Add S3_ENDPOINT, S3_BUCKET, S3_ACCESS_KEY_ID and S3_SECRET_ACCESS_KEY to .env.local (values come from `prisma bucket key create <bucket-id>`).',
-    )
-  }
-
-  return {
-    endpoint,
-    bucket,
-    accessKeyId,
-    secretAccessKey,
-    region: process.env.S3_REGION ?? 'auto',
-  }
-}
-
-let s3: S3Client | null = null
-
-function getS3Client(): { client: S3Client; bucket: string } {
-  const config = getStorageConfig()
-  if (!s3) {
-    s3 = new S3Client({
-      region: config.region,
-      endpoint: config.endpoint,
-      forcePathStyle: true,
-      credentials: {
-        accessKeyId: config.accessKeyId,
-        secretAccessKey: config.secretAccessKey,
-      },
-    })
-  }
-  return { client: s3, bucket: config.bucket }
 }
 
 function assertSafeId(value: string, label: string) {

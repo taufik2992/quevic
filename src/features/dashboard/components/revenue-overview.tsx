@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '#/components/ui/dropdown-menu'
 import { formatIDR } from '#/lib/format'
-import type { RevenuePoint } from '#/data/dashboard.types'
+import type { RevenuePoint } from '#/features/dashboard/data/dashboard.types'
 
 const RANGES = ['Last 6 months', 'Last 3 months', 'Last 12 months'] as const
 const MAX_DOMAIN = 40_000_000

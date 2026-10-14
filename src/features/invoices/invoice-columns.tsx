@@ -1,6 +1,6 @@
 import { createColumnHelper } from '@tanstack/react-table'
 import { formatIDR } from '#/lib/format'
-import type { RecentInvoice } from '#/data/dashboard.types'
+import type { RecentInvoice } from '#/features/dashboard/data/dashboard.types'
 import { ClientCell } from '#/components/data-table/client-cell'
 import { RowActionsCell } from '#/components/data-table/row-actions-cell'
 import { SortableHeader } from '#/components/data-table/sortable-header'

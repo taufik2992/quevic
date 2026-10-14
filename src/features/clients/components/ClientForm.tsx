@@ -1,4 +1,4 @@
-import { useForm } from '@tanstack/react-form'
+import { useForm, useStore } from '@tanstack/react-form'
 import {
   Briefcase,
   Building2,
@@ -9,20 +9,23 @@ import {
   Trash2,
   User,
 } from 'lucide-react'
-import { useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
+import { GetCity, GetCountries, GetState } from 'react-country-state-city'
 import { z } from 'zod'
 import { Input } from '#/components/motion/input'
 import type { InputProps } from '#/components/motion/input'
 import { Button } from '#/components/ui/button'
 import { Card, CardContent } from '#/components/ui/card'
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '#/components/ui/select'
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxTrigger,
+} from '#/components/motion/combobox'
 import { Textarea } from '#/components/ui/textarea'
 import { useToast } from '#/providers/toast-provider'
 import {
@@ -96,7 +99,7 @@ function FieldLabel({
   htmlFor,
   children,
 }: {
-  htmlFor: string
+  htmlFor?: string
   children: ReactNode
 }) {
   return (
@@ -173,36 +176,23 @@ function ClientTextField({
   )
 }
 
-const COUNTRIES = ['Indonesia', 'Malaysia', 'Singapore']
-const PROVINCES = [
-  'DKI Jakarta',
-  'Jawa Barat',
-  'Jawa Tengah',
-  'Jawa Timur',
-  'Banten',
-]
-const CITIES = [
-  'Jakarta Selatan',
-  'Jakarta Pusat',
-  'Bandung',
-  'Semarang',
-  'Surabaya',
-]
-
-function ClientSelectField({
+function ClientComboboxField({
   form,
   name,
   label,
   options,
   placeholder,
+  disabled,
+  onValueChange,
 }: {
   form: ClientFormApi
   name: 'clientType' | 'country' | 'province' | 'city'
   label: ReactNode
   options: string[]
   placeholder: string
+  disabled?: boolean
+  onValueChange?: (value: string) => void
 }) {
-  const id = `client-${name}`
   return (
     <form.Field
       name={name}
@@ -210,26 +200,39 @@ function ClientSelectField({
     >
       {(field) => (
         <div className="flex min-w-0 flex-col gap-1.5">
-          <FieldLabel htmlFor={id}>{label}</FieldLabel>
-          <Select
+          <FieldLabel>{label}</FieldLabel>
+          <Combobox
             value={field.state.value ?? ''}
-            onValueChange={(value) => field.handleChange(value)}
+            onValueChange={(value) => {
+              field.handleChange(value)
+              onValueChange?.(value)
+            }}
+            onOpenChange={(open) => {
+              if (!open) field.handleBlur()
+            }}
+            disabled={disabled}
           >
-            <SelectTrigger
-              id={id}
-              onBlur={field.handleBlur}
-              className="h-11 rounded-xl"
-            >
-              <SelectValue placeholder={placeholder} />
-            </SelectTrigger>
-            <SelectContent>
-              {options.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <ComboboxTrigger className="h-11 min-w-0 rounded-xl">
+              <ComboboxInput
+                placeholder={placeholder}
+                aria-label={
+                  typeof label === 'string' ? label : `Select ${name}`
+                }
+              />
+            </ComboboxTrigger>
+            <ComboboxContent>
+              <ComboboxList
+                ariaLabel={typeof label === 'string' ? label : name}
+              >
+                <ComboboxEmpty>No results found.</ComboboxEmpty>
+                {options.map((option) => (
+                  <ComboboxItem key={option} value={option}>
+                    {option}
+                  </ComboboxItem>
+                ))}
+              </ComboboxList>
+            </ComboboxContent>
+          </Combobox>
           {fieldError(field.state.meta.errors) ? (
             <p role="alert" className="px-1 text-xs text-destructive">
               {fieldError(field.state.meta.errors)}
@@ -238,6 +241,190 @@ function ClientSelectField({
         </div>
       )}
     </form.Field>
+  )
+}
+
+interface GeoOption {
+  id: number
+  name: string
+}
+
+function withCurrentValue(names: string[], current: string | undefined) {
+  if (current && !names.includes(current)) return [current, ...names]
+  return names
+}
+
+function ClientLocationFields({ form }: { form: ClientFormApi }) {
+  const countryValue = useStore(form.store, (state) => state.values.country)
+  const provinceValue = useStore(form.store, (state) => state.values.province)
+  const cityValue = useStore(form.store, (state) => state.values.city)
+
+  const [countries, setCountries] = useState<GeoOption[]>([])
+  const [states, setStates] = useState<GeoOption[]>([])
+  const [cities, setCities] = useState<GeoOption[]>([])
+  const [loadingCountries, setLoadingCountries] = useState(true)
+  const [loadingStates, setLoadingStates] = useState(false)
+  const [loadingCities, setLoadingCities] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    setLoadingCountries(true)
+    GetCountries()
+      .then((data) => {
+        if (cancelled) return
+        setCountries((data as GeoOption[]).filter((item) => Boolean(item.name)))
+      })
+      .catch(() => {
+        if (!cancelled) setCountries([])
+      })
+      .finally(() => {
+        if (!cancelled) setLoadingCountries(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const selectedCountry = useMemo(
+    () => countries.find((item) => item.name === countryValue),
+    [countries, countryValue],
+  )
+  const selectedCountryId = selectedCountry?.id
+
+  useEffect(() => {
+    if (!selectedCountryId) {
+      setStates([])
+      return
+    }
+    let cancelled = false
+    setLoadingStates(true)
+    GetState(selectedCountryId)
+      .then((data) => {
+        if (cancelled) return
+        setStates((data as GeoOption[]).filter((item) => Boolean(item.name)))
+      })
+      .catch(() => {
+        if (!cancelled) setStates([])
+      })
+      .finally(() => {
+        if (!cancelled) setLoadingStates(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [selectedCountryId])
+
+  const selectedState = useMemo(
+    () => states.find((item) => item.name === provinceValue),
+    [states, provinceValue],
+  )
+  const selectedStateId = selectedState?.id
+
+  useEffect(() => {
+    if (!selectedCountryId || !selectedStateId) {
+      setCities([])
+      return
+    }
+    let cancelled = false
+    setLoadingCities(true)
+    GetCity(selectedCountryId, selectedStateId)
+      .then((data) => {
+        if (cancelled) return
+        setCities((data as GeoOption[]).filter((item) => Boolean(item.name)))
+      })
+      .catch(() => {
+        if (!cancelled) setCities([])
+      })
+      .finally(() => {
+        if (!cancelled) setLoadingCities(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [selectedCountryId, selectedStateId])
+
+  const countryOptions = useMemo(
+    () =>
+      withCurrentValue(
+        countries.map((item) => item.name),
+        countryValue,
+      ),
+    [countries, countryValue],
+  )
+  const provinceOptions = useMemo(
+    () =>
+      withCurrentValue(
+        states.map((item) => item.name),
+        provinceValue,
+      ),
+    [states, provinceValue],
+  )
+  const cityOptions = useMemo(
+    () =>
+      withCurrentValue(
+        cities.map((item) => item.name),
+        cityValue,
+      ),
+    [cities, cityValue],
+  )
+
+  return (
+    <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+      <ClientComboboxField
+        form={form}
+        name="country"
+        label="Country"
+        options={countryOptions}
+        placeholder={loadingCountries ? 'Loading...' : 'Select country'}
+        disabled={loadingCountries || countryOptions.length === 0}
+        onValueChange={() => {
+          form.setFieldValue('province', undefined)
+          form.setFieldValue('city', undefined)
+        }}
+      />
+      <ClientComboboxField
+        form={form}
+        name="province"
+        label="State / Province"
+        options={provinceOptions}
+        placeholder={
+          loadingStates
+            ? 'Loading...'
+            : !selectedCountry
+              ? 'Select country first'
+              : provinceOptions.length === 0
+                ? 'No provinces'
+                : 'Select province'
+        }
+        disabled={!selectedCountry || loadingStates}
+        onValueChange={() => {
+          form.setFieldValue('city', undefined)
+        }}
+      />
+      <ClientComboboxField
+        form={form}
+        name="city"
+        label="City"
+        options={cityOptions}
+        placeholder={
+          loadingCities
+            ? 'Loading...'
+            : !selectedState
+              ? 'Select province first'
+              : cityOptions.length === 0
+                ? 'No cities'
+                : 'Select city'
+        }
+        disabled={!selectedState || loadingCities}
+      />
+      <ClientTextField
+        form={form}
+        name="postalCode"
+        label="Postal Code"
+        inputMode="numeric"
+        placeholder="12950"
+      />
+    </div>
   )
 }
 
@@ -421,7 +608,7 @@ export function ClientForm({
             placeholder="PT Maju Bersama"
             leftIcon={<Building2 />}
           />
-          <ClientSelectField
+          <ClientComboboxField
             form={form}
             name="clientType"
             label="Client Type"
@@ -523,36 +710,7 @@ export function ClientForm({
             </div>
           )}
         </form.Field>
-        <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-          <ClientSelectField
-            form={form}
-            name="country"
-            label="Country"
-            options={COUNTRIES}
-            placeholder="Select country"
-          />
-          <ClientSelectField
-            form={form}
-            name="province"
-            label="State / Province"
-            options={PROVINCES}
-            placeholder="Select province"
-          />
-          <ClientSelectField
-            form={form}
-            name="city"
-            label="City"
-            options={CITIES}
-            placeholder="Select city"
-          />
-          <ClientTextField
-            form={form}
-            name="postalCode"
-            label="Postal Code"
-            inputMode="numeric"
-            placeholder="12950"
-          />
-        </div>
+        <ClientLocationFields form={form} />
       </SectionCard>
 
       <SectionCard

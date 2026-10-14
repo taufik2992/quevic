@@ -1,6 +1,6 @@
-import type { ClientPreviewModel } from '#/features/clients/templates/templateDummy'
-import { renderClientTemplate } from '#/features/clients/templates/CardTemplate'
-import { TemplatePreview } from '../templates/Templatepreview'
+import type { ClientPreviewModel } from '#/features/templates/data/templateDummy'
+import { renderClientTemplate } from '#/features/templates/data/CardTemplate'
+import { TemplatePreview } from '../../templates/components/Templatepreview'
 
 // Shared "Client Preview". No markup lives here: the visual comes from
 // `renderClientTemplate` (the same HTML used for A4 / PDF), displayed in a

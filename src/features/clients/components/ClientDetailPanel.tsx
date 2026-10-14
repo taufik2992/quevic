@@ -22,14 +22,14 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '#/components/ui/tabs'
 import { useToast } from '#/providers/toast-provider'
 import { formatIDR } from '#/lib/format'
-import { clientActivitiesDummy } from '#/data/client.dummy'
+import { clientActivitiesDummy } from '../data/client.dummy'
 import type {
   ClientActivity,
   ClientActivityType,
   ClientListItem,
-} from '#/data/client.types'
+} from '../data/client.types'
 import { useDeleteClient } from '#/features/clients/client.queries'
-import { buildClientPreviewModel } from '#/features/clients/templates/templateDummy'
+import { buildClientPreviewModel } from '#/features/templates/data/templateDummy'
 
 import { DeleteClientDialog } from '#/features/clients/components/DeleteClientDialog'
 import { ClientPreviewCard } from './ClientPreviewCard'
